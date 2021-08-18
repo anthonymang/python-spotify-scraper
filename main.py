@@ -43,10 +43,17 @@ playlist_json = json.dumps(playlist_res.json())
 this_playlist = json.loads(playlist_json)
 
 tracks = this_playlist['items']
-pp.pprint(tracks)
-print('-------Song URLs Here---------')
 
-song_array = []
+data_file = open('data_file.csv', 'w')
+
+csv_writer = csv.writer(data_file)
+
+header = ['Artist Name', 'Song Name', 'Album Name', 'Release Type', 'Release Date', 'URL', 'Explicit', 'ISRC', 'Genre', 'Track Popularity', 'Artist Followers', 'Artist Popularity']
+
+csv_writer.writerow(header)
+
+
+
 for track in tracks:
     song_href = track['track']['href']
     song_url = f'{song_href}?market=US'
@@ -59,30 +66,6 @@ for track in tracks:
     artist_res = requests.get(url=artist_url, headers=headers)
     artist_json = json.dumps(artist_res.json())
     this_artist = json.loads(artist_json)
-    song_artist = {**this_song, **this_artist}
-    song_array.append(song_artist)
-
-songs = {'songs': song_array}
-with open('data.json', 'a') as outfile:
-    json.dump(songs, outfile)
-
-with open('data.json') as json_file:
-    data = json.load(json_file)
-
-song_data = data['songs']
-
-data_file = open('data_file.csv', 'w')
-
-csv_writer = csv.writer(data_file)
-
-count = 0
-
-for song in song_data:
-    if count == 0:
-        header = song.keys()
-        csv_writer.writerow(header)
-        count+=1
-    
-    csv_writer.writerow(song.values())
-
-    data_file.close()
+    pp.pprint(this_artist)
+    values = [this_artist['name'], this_song['name'], this_song['album']['name'], this_song['album']['album_type'], this_song['album']['release_date'], this_song['external_urls']['spotify'], this_song['explicit'], this_song['external_ids']['isrc'], this_artist['genres'], this_song['popularity'], this_artist['followers']['total'], this_artist['popularity']]
+    csv_writer.writerow(values)
