@@ -10,10 +10,8 @@ CLIENT_ID = config("CLIENT_ID")
 CLIENT_SECRET = config("CLIENT_SECRET")
 
 initial_uri = input('Copy and paste Spotify Playlist URI here:\n')
-print(initial_uri)
 
 plain_uri = initial_uri.split(':')[-1]
-print(plain_uri)
 
 url = 'https://accounts.spotify.com/api/token'
 headers = {}
